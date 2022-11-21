@@ -1,34 +1,31 @@
-import { Size, Unwrap } from "./tuple";
+import { Size } from "./tuple";
 import { vec, vector, Vector } from "./vector";
 
-export type Matrix<A, M extends number, N extends number> = Vector<
-  Vector<A, N>,
+export type Matrix<M extends number, N extends number> = Vector<
+  Vector<number, N>,
   M
 >;
 
-export type Row<A, N extends number> = Matrix<A, 1, N>;
+export type Row<N extends number> = Matrix<1, N>;
 
-export const row = <T extends any[]>(...as: T): Row<Unwrap<T>, Size<T>> =>
+export const row = <T extends number[]>(...as: T): Row<Size<T>> =>
   vec(vec(...as));
 
-export type Column<A, M extends number> = Matrix<A, M, 1>;
+export type Column<M extends number> = Matrix<M, 1>;
 
-export const column = <T extends any[]>(...as: T): Column<Unwrap<T>, Size<T>> =>
-  vector(as.length)(as.map((a) => vec(a)))! as unknown as Vector<
-    Vector<Unwrap<T>, 1>,
-    Size<T>
-  >;
+export const column = <T extends number[]>(...as: T): Column<Size<T>> =>
+  vector(as.length)(as.map((a) => vec(a)))! as Column<Size<T>>;
 
 export const dot =
-  <N extends number, P extends number>(b: Matrix<number, N, P>) =>
-  <M extends number>(a: Matrix<number, M, N>): Matrix<number, M, P> =>
+  <N extends number, P extends number>(b: Matrix<N, P>) =>
+  <M extends number>(a: Matrix<M, N>): Matrix<M, P> =>
     null as any;
 
-export const transpose = <A, M extends number, N extends number>(
-  m: Matrix<A, M, N>
-): Matrix<A, N, M> =>
+export const transpose = <M extends number, N extends number>(
+  m: Matrix<M, N>
+): Matrix<N, M> =>
   new Array((m[0] ?? []).length)
     .fill(0)
     .map((_, j) =>
       new Array(m.length).fill(0).map((_, i) => m[i][j])
-    ) as Matrix<A, N, M>;
+    ) as Matrix<N, M>;
