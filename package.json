@@ -1,0 +1,26 @@
+{
+  "name": "@artfuldev/ts-matrix",
+  "version": "1.0.0",
+  "description": "Strongly typed matrices",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "tsc",
+    "prepack": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/artfuldev/ts-matrix.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/artfuldev/ts-matrix/issues"
+  },
+  "homepage": "https://github.com/artfuldev/ts-matrix#readme",
+  "devDependencies": {
+    "typescript": "^4.9.3"
+  }
+}
