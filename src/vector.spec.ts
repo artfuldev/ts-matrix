@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { vec, vector } from "./vector";
+import { append, vec, vector } from "./vector";
 
 describe("vector", () => {
   describe("vector", () => {
@@ -36,6 +36,33 @@ describe("vector", () => {
 
       it("should contain the items", () => {
         expect(vec(...items).as).to.deep.equal(items);
+      });
+    });
+  });
+
+  describe("append", () => {
+    describe("given a suffix", () => {
+      const suffix = vec(4, 5, 6);
+
+      describe("given a vector", () => {
+        const items = vec(1, 2, 3);
+
+        it("should append the suffix to items", () => {
+          const { as } = append(suffix)(items);
+          expect(as).to.deep.equal([...items.as, ...suffix.as]);
+        });
+
+        it("should leave suffix intact", () => {
+          const previous_suffix = suffix;
+          append(suffix)(items);
+          expect(suffix).to.deep.equal(previous_suffix);
+        });
+
+        it("should leave items intact", () => {
+          const previous_items = items;
+          append(suffix)(items);
+          expect(items).to.deep.equal(previous_items);
+        });
       });
     });
   });
