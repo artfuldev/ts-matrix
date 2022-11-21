@@ -6,15 +6,17 @@ export type Matrix<A, M extends number, N extends number> = Vector<
   M
 >;
 
-export type Column<A, M extends number> = Matrix<A, M, 1>;
-
 export const array_2d = <A, M extends number, N extends number>(
   x: Matrix<A, M, N>
 ): TupleOf<TupleOf<A, N>, M> =>
   x.as.map((v) => v.as) as TupleOf<TupleOf<A, N>, M>;
 
-export const row = <T extends any[]>(...as: T): Matrix<Unwrap<T>, 1, Size<T>> =>
+export type Row<A, N extends number> = Matrix<A, 1, N>;
+
+export const row = <T extends any[]>(...as: T): Row<Unwrap<T>, Size<T>> =>
   vec(vec(...as));
+
+export type Column<A, M extends number> = Matrix<A, M, 1>;
 
 export const column = <T extends any[]>(...as: T): Column<Unwrap<T>, Size<T>> =>
   vector(as.length)(as.map((a) => vec(a)))! as unknown as Vector<
