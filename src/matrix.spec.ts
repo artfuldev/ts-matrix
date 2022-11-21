@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { column, row, transpose } from "./matrix";
+import { column, row, sum, transpose } from "./matrix";
 import { vec } from "./vector";
 
 describe("matrix", () => {
@@ -35,6 +35,20 @@ describe("matrix", () => {
 
       it("should return its input when applied twice", () => {
         expect(transpose(transpose(m))).to.deep.equal(m);
+      });
+    });
+  });
+
+  describe("sum", () => {
+    describe("given a matrix", () => {
+      const a = vec(vec(1, 2, 3), vec(4, 5, 6));
+
+      describe("given another matrix with the same dimensions", () => {
+        const b = vec(vec(1, 2, 3), vec(4, 5, 6));
+
+        it("should return the element-wise sum", () => {
+          expect(sum(b)(a)).to.deep.equal(vec(vec(2, 4, 6), vec(8, 10, 12)));
+        });
       });
     });
   });
