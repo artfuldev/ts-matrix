@@ -19,9 +19,7 @@ export const vector =
       }))
       .pop() ?? null;
 
-export const vec = <T extends any[]>(
-  ...as: T
-): Vector<Unwrap<T>, Size<T>> => ({
+export const vec = <T extends any[]>(...as: T): Vector<Unwrap<T>, Size<T>> => ({
   __type: __vector,
   as: as as TupleOf<Unwrap<T>, Size<T>>,
 });
@@ -30,5 +28,5 @@ export const append =
   <A, T extends number>({ as: tas }: Vector<A, T>) =>
   <S extends number>({ as: sas }: Vector<A, S>): Vector<A, Sum<T, S>> => ({
     __type: __vector,
-    as: [...sas, ...tas] as TupleOf<A, Sum<T, S>>,
+    as: sas.concat(tas) as TupleOf<A, Sum<T, S>>,
   });
