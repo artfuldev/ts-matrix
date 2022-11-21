@@ -30,7 +30,7 @@ export const dot =
   <M extends number>(a: Matrix<M, N>): Matrix<M, P> =>
     null as any;
 
-export const sum =
+export const add =
   <M extends number, N extends number>(b: Matrix<M, N>) =>
   <M extends number>(a: Matrix<M, N>): Matrix<M, N> =>
     a.map((r, i) => r.map((x, j) => x + b[i][j])) as Matrix<M, N>;

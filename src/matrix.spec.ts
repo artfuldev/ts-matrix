@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { column, row, scale, sum, transpose, zeros } from "./matrix";
+import { column, row, scale, add, transpose, zeros } from "./matrix";
 import { vec } from "./vector";
 
 describe("matrix", () => {
@@ -61,7 +61,7 @@ describe("matrix", () => {
     });
   });
 
-  describe("sum", () => {
+  describe("add", () => {
     describe("given a matrix", () => {
       const a = vec(vec(1, 2, 3), vec(4, 5, 6));
 
@@ -69,7 +69,7 @@ describe("matrix", () => {
         const b = vec(vec(1, 2, 3), vec(4, 5, 6));
 
         it("should return the element-wise sum", () => {
-          expect(sum(b)(a)).to.deep.equal(vec(vec(2, 4, 6), vec(8, 10, 12)));
+          expect(add(b)(a)).to.deep.equal(vec(vec(2, 4, 6), vec(8, 10, 12)));
         });
       });
     });
