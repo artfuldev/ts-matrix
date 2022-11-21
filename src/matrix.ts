@@ -1,7 +1,10 @@
 import { Size, TupleOf, Unwrap } from "./tuple";
 import { vec, vector, Vector } from "./vector";
 
-type Matrix<A, M extends number, N extends number> = Vector<Vector<A, N>, M>;
+export type Matrix<A, M extends number, N extends number> = Vector<
+  Vector<A, N>,
+  M
+>;
 
 export const array_2d = <A, M extends number, N extends number>(
   x: Matrix<A, M, N>
