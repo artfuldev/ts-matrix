@@ -33,9 +33,12 @@ export const dot =
 export const sum =
   <M extends number, N extends number>(b: Matrix<M, N>) =>
   <M extends number>(a: Matrix<M, N>): Matrix<M, N> =>
-    zeros(m(a))(n(a)).map((s, i) =>
-      s.map((_, j) => a[i][j] + b[i][j])
-    ) as Matrix<M, N>;
+    a.map((r, i) => r.map((x, j) => x + b[i][j])) as Matrix<M, N>;
+
+export const scale =
+  (c: number) =>
+  <M extends number, N extends number>(a: Matrix<M, N>): Matrix<M, N> =>
+    a.map((r) => r.map((x) => x * c)) as Matrix<M, N>;
 
 export const transpose = <M extends number, N extends number>(
   x: Matrix<M, N>

@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { column, row, sum, transpose, zeros } from "./matrix";
+import { column, row, scale, sum, transpose, zeros } from "./matrix";
 import { vec } from "./vector";
 
 describe("matrix", () => {
@@ -70,6 +70,22 @@ describe("matrix", () => {
 
         it("should return the element-wise sum", () => {
           expect(sum(b)(a)).to.deep.equal(vec(vec(2, 4, 6), vec(8, 10, 12)));
+        });
+      });
+    });
+  });
+
+  describe("scale", () => {
+    describe("given a scalar value", () => {
+      const c = 2;
+
+      describe("given a matrix", () => {
+        const a = vec(vec(1, 2, 3), vec(4, 5, 6));
+
+        it("should return the element-wise product", () => {
+          expect(
+            scale(c)(a).every((r, i) => r.every((x, j) => x === c * a[i][j]))
+          ).to.be.true;
         });
       });
     });
