@@ -11,10 +11,6 @@ describe("vector", () => {
         it("should create a vector", () => {
           expect(vector(size)(array)).to.not.be.null;
         });
-
-        it("should contain the provided array", () => {
-          expect(vector(size)(array)?.as).to.deep.equal(array);
-        });
       });
 
       describe("given an array of different size", () => {
@@ -33,10 +29,6 @@ describe("vector", () => {
       it("should create a vector", () => {
         expect(vec(...items)).to.not.be.null;
       });
-
-      it("should contain the items", () => {
-        expect(vec(...items).as).to.deep.equal(items);
-      });
     });
   });
 
@@ -48,8 +40,7 @@ describe("vector", () => {
         const items = vec(1, 2, 3);
 
         it("should append the suffix to items", () => {
-          const { as } = append(suffix)(items);
-          expect(as).to.deep.equal([...items.as, ...suffix.as]);
+          expect(append(suffix)(items)).to.deep.equal([...items, ...suffix]);
         });
 
         it("should leave suffix intact", () => {
