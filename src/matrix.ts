@@ -25,10 +25,17 @@ export type Column<M extends number> = Matrix<M, 1>;
 export const column = <T extends number[]>(...as: T): Column<Size<T>> =>
   vector(as.length)(as.map((a) => vec(a)))! as Column<Size<T>>;
 
-export const dot =
+export const multiply =
   <N extends number, P extends number>(b: Matrix<N, P>) =>
   <M extends number>(a: Matrix<M, N>): Matrix<M, P> =>
-    null as any;
+    zeros(m(a))(n(b)).map((c, i) =>
+      c.map((_, j) =>
+        new Array(n(a))
+          .fill(0)
+          .map((_, r) => a[i][r] * b[r][j])
+          .reduce((x, y) => x + y, 0)
+      )
+    ) as Matrix<M, P>;
 
 export const add =
   <M extends number, N extends number>(b: Matrix<M, N>) =>
