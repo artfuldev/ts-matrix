@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { column, row, sum, transpose } from "./matrix";
+import { column, row, sum, transpose, zeros } from "./matrix";
 import { vec } from "./vector";
 
 describe("matrix", () => {
@@ -19,6 +19,28 @@ describe("matrix", () => {
 
       it("should return a column vector", () => {
         expect(column(...items)).to.deep.equal([[1], [2], [3]]);
+      });
+    });
+  });
+
+  describe("zeros", () => {
+    describe("given a row count", () => {
+      const m = 3;
+
+      describe("given a column count", () => {
+        const n = 2;
+
+        it("should return a matrix with given number of rows", () => {
+          expect(zeros(m)(n).length).to.equal(m);
+        });
+
+        it("should return a matrix with given number of columns", () => {
+          expect(zeros(m)(n).every((r) => r.length === n)).to.be.true;
+        });
+
+        it("should have all zeros", () => {
+          expect(zeros(m)(n).every((r) => r.every((x) => x === 0))).to.be.true;
+        });
       });
     });
   });
