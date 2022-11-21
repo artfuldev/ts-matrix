@@ -32,5 +32,3 @@ export const append =
     __type: __vector,
     as: [...sas, ...tas] as TupleOf<A, Sum<T, S>>,
   });
-
-const x = vec(1, 2, 3);
