@@ -8,6 +8,7 @@ import {
   zeros,
   multiply,
   identity,
+  diagonal,
 } from "./matrix";
 import { vec } from "./vector";
 
@@ -125,14 +126,42 @@ describe("matrix", () => {
     });
   });
 
+  describe("diagonal", () => {
+    describe("given a list of diagonal elements", () => {
+      const d = [1, 2, 3];
+      const n = d.length;
+
+      it("should return a matrix with n rows", () => {
+        expect(diagonal(...d).length).to.equal(n);
+      });
+
+      it("should return a matrix with the main diagonal", () => {
+        const m = diagonal(...d);
+        expect(
+          new Array(n)
+            .fill(0)
+            .flatMap((_, i) => new Array(n).fill(0).map((_, j) => vec(i, j)))
+            .filter(([i, j]) => i === j)
+            .map(([i, j]) => m[i][j])
+        ).to.deep.equal(d);
+      });
+
+      it("should return a matrix with only 0 everywhere else", () => {
+        const m = diagonal(...d);
+        expect(
+          new Array(n)
+            .fill(0)
+            .flatMap((_, i) => new Array(n).fill(0).map((_, j) => vec(i, j)))
+            .filter(([i, j]) => i !== j)
+            .every(([i, j]) => m[i][j] === 0)
+        ).to.be.true;
+      });
+    });
+  });
+
   describe("identity", () => {
     describe("given a scalar value", () => {
       const n = 2;
-
-      it("should return a square matrix", () => {
-        const m = identity(n);
-        expect(m.length).to.equal(m[0].length);
-      });
 
       it("should return a matrix with n rows", () => {
         expect(identity(n).length).to.equal(n);

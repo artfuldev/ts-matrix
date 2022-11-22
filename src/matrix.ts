@@ -52,5 +52,12 @@ export type Column<M extends number> = Matrix<M, 1>;
 export const column = <T extends number[]>(...as: T): Column<Size<T>> =>
   transpose(row(...as));
 
-export const identity = <N extends number>(n: N): Matrix<N, N> =>
-  zeros(n)(n).map((r, i) => r.map((_, j) => (i === j ? 1 : 0))) as Matrix<N, N>;
+export type Square<N extends number> = Matrix<N, N>;
+
+export const diagonal = <T extends number[]>(...as: T): Square<T["length"]> =>
+  zeros(as.length)(as.length).map((r, i) =>
+    r.map((_, j) => (i === j ? as[i] : 0))
+  ) as Square<T["length"]>;
+
+export const identity = <N extends number>(n: N): Square<N> =>
+  diagonal(...new Array(n).fill(1)) as Square<N>;
