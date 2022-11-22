@@ -1,20 +1,54 @@
 import { Size } from "./tuple";
 import { vec, Vector } from "./vector";
 
+/**
+ * A 2 dimensional vector of numbers.
+ */
 export type Matrix<M extends number, N extends number> = Vector<
   Vector<number, N>,
   M
 >;
 
+/**
+ * Gets the number of rows of the matrix.
+ * @param x The input matrix.
+ * @returns The number of rows of the matrix.
+ */
 const m = <M extends number>(x: Matrix<M, any>): M => x.length;
 
+/**
+ * Gets the number of columns of the matrix.
+ * @param x The input matrix.
+ * @returns The number of columns of the matrix.
+ */
 const n = <N extends number>(x: Matrix<any, N>): N => (x[0] ?? []).length;
 
+/**
+ * Creates a matrix of a given number of rows and columns filled with zeros.
+ * @param m The number of rows of the matrix.
+ * @returns A function that takes a number of columns of the matrix to create a
+ * matrix of zeros of the specified size.
+ * @example
+ * // [[0, 0], [0, 0], [0, 0]]
+ * zeros(3)(2);
+ */
 export const zeros =
   <M extends number>(m: M) =>
   <N extends number>(n: N): Matrix<M, N> =>
     new Array(m).fill(new Array(n).fill(0)) as Matrix<M, N>;
 
+/**
+ * Multiplies a matrix B with another matrix A to return AB. The number of rows
+ * of matrix B must match the number of columns of the matrix A.
+ * @param b The right matrix B.
+ * @returns A function that right-multiplies the provided matrix B with any
+ * matrix A.
+ * @example
+ * const b = vec(vec(0, 1000), vec(1, 100), vec(0, 10));
+ * const a = vec(vec(2, 3, 4), vec(1, 0, 0));
+ * // [[3, 2340], [0, 1000]]
+ * multiply(b)(a);
+ */
 export const multiply =
   <N extends number, P extends number>(b: Matrix<N, P>) =>
   <M extends number>(a: Matrix<M, N>): Matrix<M, P> =>
@@ -27,11 +61,31 @@ export const multiply =
       )
     ) as Matrix<M, P>;
 
+/**
+ * Adds two matrices of the same dimensions.
+ * @param b The matrix to be added.
+ * @returns A function that adds the provided matrix to any matrix of the same
+ * dimensions.
+ * @example
+ * const b = vec(vec(1, 2), vec(0, 0));
+ * const a = vec(vec(0, 0), vec(1, 2));
+ * // [[1, 2], [1, 2]]
+ * add(b)(a);
+ */
 export const add =
   <M extends number, N extends number>(b: Matrix<M, N>) =>
   <M extends number>(a: Matrix<M, N>): Matrix<M, N> =>
     a.map((r, i) => r.map((x, j) => x + b[i][j])) as Matrix<M, N>;
 
+/**
+ * Scales a matrix by a specified scalar value.
+ * @param c The constant to scale the matrix by
+ * @returns A function that scales its input matrix by the provided scalar `c`.
+ * @example
+ * const a = vec(vec(1, 2), vec(0, 0));
+ * // [[12, 24], [0, 0]]
+ * scale(12)(a)
+ */
 export const scale =
   (c: number) =>
   <M extends number, N extends number>(a: Matrix<M, N>): Matrix<M, N> =>
