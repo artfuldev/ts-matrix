@@ -84,35 +84,86 @@ export const add =
  * @example
  * const a = vec(vec(1, 2), vec(0, 0));
  * // [[12, 24], [0, 0]]
- * scale(12)(a)
+ * scale(12)(a);
  */
 export const scale =
   (c: number) =>
   <M extends number, N extends number>(a: Matrix<M, N>): Matrix<M, N> =>
     a.map((r) => r.map((x) => x * c)) as Matrix<M, N>;
 
+/**
+ * Transposes a matrix by swapping its rows and columns.
+ * @param x The input matrix.
+ * @returns The transposed matrix.
+ * @example
+ * const a = vec(vec(1, 2), vec(0, 0), vec(3, 4));
+ * // [[1, 0, 3], [2, 0, 4]]
+ * transpose(a);
+ */
 export const transpose = <M extends number, N extends number>(
   x: Matrix<M, N>
 ): Matrix<N, M> =>
   zeros(n(x))(m(x)).map((t, j) => t.map((_, i) => x[i][j])) as Matrix<N, M>;
 
+/**
+ * A row vector, a matrix having only 1 row.
+ */
 export type Row<N extends number> = Matrix<1, N>;
 
+/**
+ * Creates a row vector from a specified set of elements.
+ * @param as  The values of the row vector.
+ * @returns The row vector of the provided values.
+ * @example
+ * // [[1, 2, 3]]
+ * row(1, 2, 3);
+ */
 export const row = <T extends number[]>(...as: T): Row<Size<T>> =>
   vec(vec(...as));
 
+/**
+ * A column vector, a matrix having only 1 column.
+ */
 export type Column<M extends number> = Matrix<M, 1>;
 
+/**
+ * Creates a column vector from a specified set of elements.
+ * @param as The values of the column vector.
+ * @returns The column vector of the provided values.
+ * @example
+ * // [[1], [2], [3]]
+ * column(1, 2, 3);
+ */
 export const column = <T extends number[]>(...as: T): Column<Size<T>> =>
   transpose(row(...as));
 
+/**
+ * A square matrix, a matrix having an equal number of rows and columns.
+ */
 export type Square<N extends number> = Matrix<N, N>;
 
+/**
+ * 
+ * @param as The values of the diagonal.
+ * @returns A square matrix containing zeros except for the provided values
+ * along its major diagonal.
+ * @example
+ * // [[1, 0, 0], [0, 4, 0], [0, 0, 9]]
+ * diagonal(1, 4, 9);
+ */
 export const diagonal = <T extends number[]>(...as: T): Square<T["length"]> =>
   zeros(as.length)(as.length).map((r, i) =>
     r.map((_, j) => (i === j ? as[i] : 0))
   ) as Square<T["length"]>;
 
+/**
+ * Creates an identity matrix of the specified size.
+ * @param n The size of the identity matrix.
+ * @returns An identity matrix of the specified size.
+ * @example
+ * // [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+ * identity(3)
+ */
 export const identity = <N extends number>(n: N): Square<N> =>
   diagonal(...new Array(n).fill(1)) as Square<N>;
 
@@ -128,12 +179,26 @@ const elementary_switch =
         ) as Square<N>)
       : identity(n);
 
+/**
+ * Switches rows a and b of a matrix.
+ * @example
+ * const a = vec(vec(1, 2, 3), vec(0, 0, 0), vec(1, 4, 9));
+ * // [[1, 2, 3], [1, 4, 9], [0, 0, 0]]
+ * switch_rows(1)(2)(a);
+ */
 export const switch_rows =
   (a: number) =>
   (b: number) =>
   <M extends number, N extends number>(x: Matrix<M, N>): Matrix<M, N> =>
     multiply(x)(elementary_switch(a)(b)(m(x)));
 
+/**
+ * Switches columns a and b of a matrix.
+ * @example
+ * const a = vec(vec(1, 2, 3), vec(0, 0, 0), vec(1, 4, 9));
+ * // [[1, 3, 2], [0, 0, 0], [1, 9, 4]]
+ * switch_columns(1)(2)(a);
+ */
 export const switch_columns =
   (a: number) =>
   (b: number) =>
@@ -150,12 +215,26 @@ const elementary_scale =
         ) as Square<N>)
       : identity(n);
 
+/**
+ * Scales a specified row in the matrix by a scalar.
+ * @example
+ * const a = vec(vec(1, 2, 3), vec(0, 0, 0), vec(1, 4, 9));
+ * // [[2, 4, 6], [0, 0, 0], [1, 4, 9]]
+ * scale(0)(2)(a);
+ */
 export const scale_row =
   (a: number) =>
   (k: number) =>
   <M extends number, N extends number>(x: Matrix<M, N>): Matrix<M, N> =>
     multiply(x)(elementary_scale(a)(k)(m(x)));
 
+/**
+ * Scales a specified column in the matrix by a scalar.
+ * @example
+ * const a = vec(vec(1, 2, 3), vec(0, 0, 0), vec(1, 4, 9));
+ * // [[2, 2, 3], [0, 0, 0], [2, 4, 9]]
+ * scale(0)(2)(a);
+ */
 export const scale_column =
   (a: number) =>
   (k: number) =>
@@ -173,16 +252,30 @@ const elementary_add =
         ) as Square<N>)
       : identity(n);
 
+/**
+ * Adds a scaled version of a source row into a target row.
+ * @example
+ * const a = vec(vec(1, 2, 3), vec(0, 0, 0), vec(1, 4, 9));
+ * // [[1, 2, 3], [-2, -4, -6], [1, 4, 9]]
+ * scale(1)(0)(-2)(a);
+ */
 export const add_row =
-  (a: number) =>
-  (b: number) =>
+  (target: number) =>
+  (source: number) =>
   (k: number) =>
-  <M extends number, N extends number>(x: Matrix<M, N>): Matrix<M, N> =>
-    multiply(x)(elementary_add(a)(b)(k)(m(x)));
+  <M extends number, N extends number>(mn: Matrix<M, N>): Matrix<M, N> =>
+    multiply(mn)(elementary_add(target)(source)(k)(m(mn)));
 
+/**
+ * Adds a scaled version of a source column into a target column.
+ * @example
+ * const a = vec(vec(1, 2, 3), vec(0, 0, 0), vec(1, 4, 9));
+ * // [[1, 0, 3], [0, 0, 0], [1, 2, 9]]
+ * scale(1)(0)(-2)(a);
+ */
 export const add_column =
-  (a: number) =>
-  (b: number) =>
+  (target: number) =>
+  (source: number) =>
   (k: number) =>
-  <M extends number, N extends number>(x: Matrix<M, N>): Matrix<M, N> =>
-    multiply(elementary_add(b)(a)(k)(n(x)))(x);
+  <M extends number, N extends number>(mn: Matrix<M, N>): Matrix<M, N> =>
+    multiply(elementary_add(source)(target)(k)(n(mn)))(mn);
