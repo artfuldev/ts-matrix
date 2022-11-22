@@ -1,1 +1,10 @@
-export * from "./matrix";
+export { Matrix, zeros } from "./matrix";
+export * from "./add";
+export * from "./scale";
+export * from "./multiply";
+export * from "./transpose";
+export * from "./row";
+export * from "./column";
+export * from "./diagonal";
+export * from "./identity";
+export * from "./elementary";
