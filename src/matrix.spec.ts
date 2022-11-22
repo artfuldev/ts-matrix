@@ -13,6 +13,8 @@ import {
   switch_columns,
   scale_row,
   scale_column,
+  add_row,
+  add_column,
 } from "./matrix";
 import { vec } from "./vector";
 
@@ -292,6 +294,66 @@ describe("matrix", () => {
 
           it("should return original matrix", () => {
             expect(scale_column(a)(k)(m)).to.deep.equal(m);
+          });
+        });
+      });
+    });
+  });
+
+  describe("add_row", () => {
+    describe("given a target row index", () => {
+      const a = 2;
+
+      describe("given a source row index", () => {
+        const b = 1;
+
+        describe("given a scale factor", () => {
+          const k = 2;
+
+          describe("given a matrix with the row indices", () => {
+            const m = column(1, 2, 3);
+
+            it("should add the rows", () => {
+              expect(add_row(a)(b)(k)(m)).to.deep.equal(column(1, 2, 7));
+            });
+          });
+
+          describe("given a matrix without the row indices", () => {
+            const m = column(1, 2);
+
+            it("should return the original matrix", () => {
+              expect(add_row(a)(b)(k)(m)).to.deep.equal(m);
+            });
+          });
+        });
+      });
+    });
+  });
+
+  describe("add_column", () => {
+    describe("given a target column index", () => {
+      const a = 2;
+
+      describe("given a source column index", () => {
+        const b = 1;
+
+        describe("given a scale factor", () => {
+          const k = 2;
+
+          describe("given a matrix with the column indices", () => {
+            const m = row(1, 2, 3);
+
+            it("should add the columns", () => {
+              expect(add_column(a)(b)(k)(m)).to.deep.equal(row(1, 2, 7));
+            });
+          });
+
+          describe("given a matrix without the column indices", () => {
+            const m = row(1, 2);
+
+            it("should return the original matrix", () => {
+              expect(add_column(a)(b)(k)(m)).to.deep.equal(m);
+            });
           });
         });
       });

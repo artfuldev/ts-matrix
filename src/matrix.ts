@@ -107,3 +107,28 @@ export const scale_column =
   (k: number) =>
   <M extends number, N extends number>(x: Matrix<M, N>): Matrix<M, N> =>
     multiply(elementary_scale(a)(k)(n(x)))(x);
+
+const elementary_add =
+  (a: number) =>
+  (b: number) =>
+  (k: number) =>
+  <N extends number>(n: N): Square<N> =>
+    within(0, n)(a) && within(0, n)(b)
+      ? (identity(n).map((r, i) =>
+          r.map((x, j) => (i === a && j === b ? k : x))
+        ) as Square<N>)
+      : identity(n);
+
+export const add_row =
+  (a: number) =>
+  (b: number) =>
+  (k: number) =>
+  <M extends number, N extends number>(x: Matrix<M, N>): Matrix<M, N> =>
+    multiply(x)(elementary_add(a)(b)(k)(m(x)));
+
+export const add_column =
+  (a: number) =>
+  (b: number) =>
+  (k: number) =>
+  <M extends number, N extends number>(x: Matrix<M, N>): Matrix<M, N> =>
+    multiply(elementary_add(b)(a)(k)(n(x)))(x);
