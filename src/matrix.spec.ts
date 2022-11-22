@@ -11,6 +11,8 @@ import {
   diagonal,
   switch_rows,
   switch_columns,
+  scale_row,
+  scale_column,
 } from "./matrix";
 import { vec } from "./vector";
 
@@ -239,6 +241,58 @@ describe("matrix", () => {
 
         it("should return original matrix", () => {
           expect(switch_rows(a)(b)(m)).to.deep.equal(m);
+        });
+      });
+    });
+  });
+
+  describe("scale_row", () => {
+    describe("given an index", () => {
+      const a = 1;
+
+      describe("given a scale factor", () => {
+        const k = 2;
+
+        describe("given a matrix with row index", () => {
+          const m = column(1, 2, 3);
+
+          it("should scale the row", () => {
+            expect(scale_row(a)(k)(m)).to.deep.equal(column(1, 4, 3));
+          });
+        });
+
+        describe("given a matrix without row index", () => {
+          const m = column(1);
+
+          it("should return original matrix", () => {
+            expect(scale_row(a)(k)(m)).to.deep.equal(m);
+          });
+        });
+      });
+    });
+  });
+
+  describe("scale_column", () => {
+    describe("given an index", () => {
+      const a = 1;
+
+      describe("given a scale factor", () => {
+        const k = 2;
+
+        describe("given a matrix with column index", () => {
+          const m = row(1, 2, 3);
+
+          it("should scale the row", () => {
+            expect(scale_column(a)(k)(m)).to.deep.equal(row(1, 4, 3));
+          });
+        });
+
+        describe("given a matrix without column index", () => {
+          const m = row(1);
+
+          it("should return original matrix", () => {
+            expect(scale_column(a)(k)(m)).to.deep.equal(m);
+          });
         });
       });
     });

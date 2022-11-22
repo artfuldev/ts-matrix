@@ -67,7 +67,7 @@ const within = (a: number, b: number) => (x: number) => x >= a && x < b;
 const elementary_switch =
   (a: number) =>
   (b: number) =>
-  <N extends number>(n: N) =>
+  <N extends number>(n: N): Square<N> =>
     within(0, n)(a) && within(0, n)(b)
       ? (identity(n).map((r, i, m) =>
           i === a ? m[b] : i === b ? m[a] : r
@@ -85,3 +85,25 @@ export const switch_columns =
   (b: number) =>
   <M extends number, N extends number>(x: Matrix<M, N>): Matrix<M, N> =>
     multiply(elementary_switch(a)(b)(n(x)))(x);
+
+const elementary_scale =
+  (a: number) =>
+  (k: number) =>
+  <N extends number>(n: N): Square<N> =>
+    within(0, n)(a)
+      ? (diagonal(
+          ...new Array(n).fill(1).map((x, i) => (i === a ? k : x))
+        ) as Square<N>)
+      : identity(n);
+
+export const scale_row =
+  (a: number) =>
+  (k: number) =>
+  <M extends number, N extends number>(x: Matrix<M, N>): Matrix<M, N> =>
+    multiply(x)(elementary_scale(a)(k)(m(x)));
+
+export const scale_column =
+  (a: number) =>
+  (k: number) =>
+  <M extends number, N extends number>(x: Matrix<M, N>): Matrix<M, N> =>
+    multiply(elementary_scale(a)(k)(n(x)))(x);
