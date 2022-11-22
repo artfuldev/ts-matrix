@@ -3,26 +3,6 @@ import { column, row, scale, add, transpose, zeros, multiply } from "./matrix";
 import { vec } from "./vector";
 
 describe("matrix", () => {
-  describe("row", () => {
-    describe("given items", () => {
-      const items = [1, 2, 3];
-
-      it("should return a row vector", () => {
-        expect(row(...items)).to.deep.equal([items]);
-      });
-    });
-  });
-
-  describe("column", () => {
-    describe("given items", () => {
-      const items = [1, 2, 3];
-
-      it("should return a column vector", () => {
-        expect(column(...items)).to.deep.equal([[1], [2], [3]]);
-      });
-    });
-  });
-
   describe("zeros", () => {
     describe("given a row count", () => {
       const m = 3;
@@ -57,6 +37,26 @@ describe("matrix", () => {
 
       it("should return its input when applied twice", () => {
         expect(transpose(transpose(m))).to.deep.equal(m);
+      });
+    });
+  });
+
+  describe("row", () => {
+    describe("given items", () => {
+      const items = [1, 2, 3];
+
+      it("should return a row vector", () => {
+        expect(row(...items)).to.deep.equal([items]);
+      });
+    });
+  });
+
+  describe("column", () => {
+    describe("given items", () => {
+      const items = [1, 2, 3];
+
+      it("should return a column vector", () => {
+        expect(column(...items)).to.deep.equal([[1], [2], [3]]);
       });
     });
   });
