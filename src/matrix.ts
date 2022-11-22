@@ -1,5 +1,5 @@
 import { Size } from "./tuple";
-import { vec, vector, Vector } from "./vector";
+import { vec, Vector } from "./vector";
 
 export type Matrix<M extends number, N extends number> = Vector<
   Vector<number, N>,
@@ -61,3 +61,27 @@ export const diagonal = <T extends number[]>(...as: T): Square<T["length"]> =>
 
 export const identity = <N extends number>(n: N): Square<N> =>
   diagonal(...new Array(n).fill(1)) as Square<N>;
+
+const within = (a: number, b: number) => (x: number) => x >= a && x < b;
+
+const elementary_switch =
+  (a: number) =>
+  (b: number) =>
+  <N extends number>(n: N) =>
+    within(0, n)(a) && within(0, n)(b)
+      ? (identity(n).map((r, i, m) =>
+          i === a ? m[b] : i === b ? m[a] : r
+        ) as Square<N>)
+      : identity(n);
+
+export const switch_rows =
+  (a: number) =>
+  (b: number) =>
+  <M extends number, N extends number>(x: Matrix<M, N>): Matrix<M, N> =>
+    multiply(x)(elementary_switch(a)(b)(m(x)));
+
+export const switch_columns =
+  (a: number) =>
+  (b: number) =>
+  <M extends number, N extends number>(x: Matrix<M, N>): Matrix<M, N> =>
+    multiply(elementary_switch(a)(b)(n(x)))(x);
