@@ -16,7 +16,7 @@ import {
   add_row,
   add_column,
 } from "./matrix";
-import { vec } from "./vector";
+import { vec } from "@artfuldev/ts-vector";
 
 describe("matrix", () => {
   describe("zeros", () => {

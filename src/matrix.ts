@@ -1,5 +1,4 @@
-import { Size } from "./tuple";
-import { vec, Vector } from "./vector";
+import { Size, vec, Vector } from "@artfuldev/ts-vector";
 
 /**
  * A 2 dimensional vector of numbers.
